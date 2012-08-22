@@ -1,0 +1,19 @@
+!!! 5
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        title Open Canvas
+        link(rel='stylesheet', href='/stylesheets/styles.css', type='text/css')
+        //if lt IE 9
+            script(src='http://html5shiv.googlecode.com/svn/trunk/html5.js')
+    body
+        #cursors
+        canvas#paper(width=1900,height=1000)
+            | Your browser is too old to support this. Time to upgrade!
+        hgroup#instructions
+            h1 Draw Anywhere!
+            h2 You will see everyone else who's doing the same.
+            h3 Tip: if the stage gets dirty, simply reload the page.
+        script(src='/socket.io/socket.io.js')
+        script(src='http://code.jquery.com/jquery-1.8.0.min.js')
+        script(src='/javascripts/main.js')
