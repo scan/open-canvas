@@ -27,6 +27,17 @@ PORT = process.env["app_port"] or 8080
 app.listen PORT, ->
     console.log ":: nodester :: \n\nApp listening on port #{@address().port}"
 
+randHex = -> (Math.floor Math.random() * 256).toString 16
+
+num = 0
+
 io.sockets.on 'connection', (socket) ->
+    colour = "##{randHex()}#{randHex()}#{randHex()}"
+
+    socket.set 'attributes', colour: colour, name: "user#{++num}", ->
+        socket.emit 'ready', colour: colour, name: "user#{num}"
+
+    socket.emit
+
     socket.on 'mousemove', (data) ->
         socket.broadcast.emit 'moving', data
