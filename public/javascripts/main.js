@@ -5,6 +5,7 @@
     if (!('getContext' in document.createElement('canvas'))) {
       return alert('Seems like your browser doesn\'t support an HTML5 canvas!');
     } else {
+      ($('#chattext')).focus();
       $doc = $(document);
       $win = $(window);
       $canvas = $('#paper');
@@ -71,11 +72,20 @@
         }
         return null;
       }), 10000);
-      return drawLine = function(fromx, fromy, tox, toy) {
+      drawLine = function(fromx, fromy, tox, toy) {
         ctx.moveTo(fromx, fromy);
         ctx.lineTo(tox, toy);
         return ctx.stroke();
       };
+      ($('#chatform')).submit(function(e) {
+        e.preventDefault();
+        socket.emit('msg', ($('#chattext')).val());
+        ($('#chattext')).val('').focus();
+        return false;
+      });
+      return socket.on('msg', function(d) {
+        return ($('#chatlist')).prepend("<li>" + d + "</li>");
+      });
     }
   });
 

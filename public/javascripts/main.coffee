@@ -2,6 +2,8 @@ $ ->
     unless 'getContext' of document.createElement 'canvas'
         alert 'Seems like your browser doesn\'t support an HTML5 canvas!'
     else
+        ($ '#chattext').focus()
+
         $doc = $ document
         $win = $ window
         $canvas = $ '#paper'
@@ -65,3 +67,14 @@ $ ->
             ctx.moveTo fromx, fromy
             ctx.lineTo tox, toy
             ctx.stroke()
+
+        ($ '#chatform').submit (e) ->
+            e.preventDefault()
+
+            socket.emit 'msg', ($ '#chattext').val()
+            ($ '#chattext').val('').focus()
+
+            false
+
+        socket.on 'msg', (d) ->
+            ($ '#chatlist').prepend "<li>#{d}</li>"

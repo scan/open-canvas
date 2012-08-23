@@ -23,7 +23,7 @@ footer,
 header {
   display: block;
 }
-hgroup {
+#instructions {
   position: fixed;
   background-color: rgba(255,255,255,0.7);
   width: 400px;
@@ -33,20 +33,22 @@ hgroup {
   margin: -120px 0 0 -225px;
   text-align: center;
   padding: 25px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
   border-radius: 10px;
   box-shadow: 0 0 3px rgba(100,100,100,0.1), 0 3px 1px #d4d4d4;
   color: #555;
 }
-hgroup h1 {
+#instructions h1 {
   font-size: 22px;
   padding-bottom: 8px;
 }
-hgroup h2 {
+#instructions h2 {
   font-size: 13px;
   font-weight: normal;
   padding-bottom: 8px;
 }
-hgroup h3 {
+#instructions h3 {
   font-size: 12px;
   font-weight: normal;
   font-style: italic;
@@ -60,4 +62,45 @@ hgroup h3 {
   width: 15px;
   height: 22px;
   background: url("../images/pointer.png") no-repeat -4px 0;
+}
+#chatpanel {
+  background-color: #aaa;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 20%;
+  height: 100%;
+}
+#chatpanel #chatform {
+  margin: 5px;
+}
+#chatpanel #chatform input,
+#chatpanel #chatform button {
+  padding: 2px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #000;
+}
+#chatpanel #chatform #chattext {
+  width: 80%;
+  color: #000;
+  padding: 2px;
+}
+#chatpanel #chatform #sendbutton {
+  background: #00b;
+  color: #eee;
+  width: 15%;
+  float: right;
+}
+#chatpanel ul#chatlist {
+  background: #fff;
+  display: block;
+  list-style-type: none;
+  margin: 10px;
+  overflow-y: auto;
+}
+#chatpanel ul#chatlist li {
+  font-size: 12px;
+  color: #555;
 }

@@ -1,3 +1,8 @@
+border-radius()
+    -webkit-border-radius: arguments
+    -moz-border-radius: arguments
+    border-radius: arguments
+
 *
     margin: 0
     padding: 0
@@ -20,7 +25,7 @@ a:hover
 section, footer, header
     display: block
 
-hgroup
+#instructions
     position: fixed
     background-color: rgba(255, 255, 255, 0.7)
     width: 400px
@@ -57,3 +62,38 @@ hgroup
         width: 15px
         height: 22px
         background: url('../images/pointer.png') no-repeat -4px 0
+
+#chatpanel
+    background-color: #aaa
+    position: fixed
+    top: 0
+    right: 0
+    width: 20%
+    height: 100%
+
+    #chatform
+        margin: 5px
+        input, button
+            padding: 2px
+            border-radius: 5px
+            border: 1px solid #000
+        #chattext
+            width: 80%
+            color: black
+            padding: 2px
+        #sendbutton
+            background: #00b
+            color: #eee
+            width: 15%
+            float: right
+
+    ul#chatlist
+        background: #fff
+        display: block
+        list-style-type: none
+        margin: 10px
+        overflow-y: auto
+
+        li
+            font-size: 12px
+            color: #555

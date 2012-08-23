@@ -11,13 +11,13 @@ app.configure ->
     app.set 'view engine', 'jade'
     app.set 'view options', layout: no
 
+    app.use express.compiler src: PUBLIC_DIR, enable: ['coffeescript']
+    app.use (require 'stylus').middleware src: PUBLIC_DIR, dest: PUBLIC_DIR
     app.use express.static PUBLIC_DIR
     app.use express.favicon()
     app.use app.router
 
 app.configure 'development', ->
-    app.use express.compiler src: PUBLIC_DIR, enable: ['coffeescript']
-    app.use (require 'stylus').middleware src: PUBLIC_DIR, dest: PUBLIC_DIR
     app.use express.errorHandler
         showStack: yes
         dumpExceptions: yes
@@ -45,3 +45,7 @@ io.sockets.on 'connection', (socket) ->
 
     socket.on 'mousemove', (data) ->
         socket.broadcast.emit 'moving', data
+
+    socket.on 'msg', (data) ->
+        socket.get 'attributes', (attr) ->
+            socket.all.emit 'msg', "<span style=\"color:#{attr.colour};font-style:italic\">#{attr.name}</span>: #{data}"
