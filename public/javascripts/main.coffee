@@ -9,6 +9,7 @@ $ ->
         $canvas = $ '#paper'
         ctx = $canvas[0].getContext '2d'
         instructions = $ '#instructions'
+        colour = '#000'
 
         id = Math.round $.now() * Math.random()
 
@@ -26,7 +27,7 @@ $ ->
                 'left': data.x
                 'top': data.y
             if data.drawing and clients[data.id]
-                drawLine clients[data.id].x, clients[data.id].y, data.x, data.y
+                drawLine clients[data.id].x, clients[data.id].y, data.x, data.y, data.colour
             clients[data.id] = data
             clients[data.id].updated = $.now()
 
@@ -52,7 +53,7 @@ $ ->
                     id: id
                 lastEmit = $.now()
             if drawing
-                drawLine prev.x, prev.y, e.pageX, e.pageY
+                drawLine prev.x, prev.y, e.pageX, e.pageY, colour
                 prev.x = e.pageX
                 prev.y = e.pageY
         setInterval (->
@@ -63,9 +64,11 @@ $ ->
                         delete cursors[ident]
                 null
             ), 10000
-        drawLine = (fromx, fromy, tox, toy) ->
+        drawLine = (fromx, fromy, tox, toy, colour) ->
+            ctx.beginPath()
             ctx.moveTo fromx, fromy
             ctx.lineTo tox, toy
+            ctx.strokeStyle = colour
             ctx.stroke()
 
         ($ '#chatform').submit (e) ->
@@ -78,3 +81,8 @@ $ ->
 
         socket.on 'msg', (d) ->
             ($ '#chatlist').prepend "<li>#{d}</li>"
+        socket.on 'joined', (d) ->
+            ($ '#chatlist').prepend "<li><i><span style=\"color:#{d.colour}\">#{d.name}</span> joined.</i></li>"
+        socket.on 'ready', (d) ->
+            colour = d.colour
+            ($ '#chatlist').prepend "<li><i>You joined as <span style=\"color:#{d.colour}\">#{d.name}</span>.</i></li>"

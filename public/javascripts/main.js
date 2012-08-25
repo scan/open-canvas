@@ -1,7 +1,7 @@
 (function() {
 
   $(function() {
-    var $canvas, $doc, $win, clients, ctx, cursors, drawLine, id, instructions, lastEmit, prev, socket;
+    var $canvas, $doc, $win, clients, colour, ctx, cursors, drawLine, id, instructions, lastEmit, prev, socket;
     if (!('getContext' in document.createElement('canvas'))) {
       return alert('Seems like your browser doesn\'t support an HTML5 canvas!');
     } else {
@@ -11,6 +11,7 @@
       $canvas = $('#paper');
       ctx = $canvas[0].getContext('2d');
       instructions = $('#instructions');
+      colour = '#000';
       id = Math.round($.now() * Math.random());
       window.drawing = false;
       clients = [];
@@ -27,7 +28,7 @@
           'top': data.y
         });
         if (data.drawing && clients[data.id]) {
-          drawLine(clients[data.id].x, clients[data.id].y, data.x, data.y);
+          drawLine(clients[data.id].x, clients[data.id].y, data.x, data.y, data.colour);
         }
         clients[data.id] = data;
         return clients[data.id].updated = $.now();
@@ -56,7 +57,7 @@
           lastEmit = $.now();
         }
         if (drawing) {
-          drawLine(prev.x, prev.y, e.pageX, e.pageY);
+          drawLine(prev.x, prev.y, e.pageX, e.pageY, colour);
           prev.x = e.pageX;
           return prev.y = e.pageY;
         }
@@ -72,9 +73,11 @@
         }
         return null;
       }), 10000);
-      drawLine = function(fromx, fromy, tox, toy) {
+      drawLine = function(fromx, fromy, tox, toy, colour) {
+        ctx.beginPath();
         ctx.moveTo(fromx, fromy);
         ctx.lineTo(tox, toy);
+        ctx.strokeStyle = colour;
         return ctx.stroke();
       };
       ($('#chatform')).submit(function(e) {
@@ -83,8 +86,15 @@
         ($('#chattext')).val('').focus();
         return false;
       });
-      return socket.on('msg', function(d) {
+      socket.on('msg', function(d) {
         return ($('#chatlist')).prepend("<li>" + d + "</li>");
+      });
+      socket.on('joined', function(d) {
+        return ($('#chatlist')).prepend("<li><i><span style=\"color:" + d.colour + "\">" + d.name + "</span> joined.</i></li>");
+      });
+      return socket.on('ready', function(d) {
+        colour = d.colour;
+        return ($('#chatlist')).prepend("<li><i>You joined as <span style=\"color:" + d.colour + "\">" + d.name + "</span>.</i></li>");
       });
     }
   });
