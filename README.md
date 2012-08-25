@@ -16,3 +16,6 @@ Currently it is an ongoing development.
 * Usernames
 * Separated Canvases
 * Different drawing tools
+* User Management
+* Infinite Canvas
+* Persistent Canvas
