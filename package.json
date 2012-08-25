@@ -15,7 +15,8 @@
             "socket.io": "",
             "jade": "",
             "stylus": "",
-            "nib": ""
+            "nib": "",
+            "underscore.string": ""
         },
         "devDependencies": {},
         "optionalDependencies": {},
