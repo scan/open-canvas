@@ -1,5 +1,6 @@
 express = require 'express'
 stylus = require 'stylus'
+_s = require 'underscore.string'
 
 module.exports = app = express.createServer()
 
@@ -58,7 +59,9 @@ io.sockets.on 'connection', (socket) ->
         data.colour = colour
         socket.broadcast.emit 'moving', data
 
+
+
     socket.on 'msg', (data) ->
         console.log data: data
-        socket.emit 'msg', "<span style=\"color:#{colour};font-style:italic\">#{name}</span>: #{data}"
-        socket.broadcast.emit 'msg', "<span style=\"color:#{colour};font-style:italic\">#{name}</span>: #{data}"
+        socket.emit 'msg', "<span style=\"color:#{colour};font-style:italic\">#{name}</span>: #{_s.escapeHTML data}"
+        socket.broadcast.emit 'msg', "<span style=\"color:#{colour};font-style:italic\">#{name}</span>: #{_s.escapeHTML data}"
