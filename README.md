@@ -9,3 +9,10 @@ Currently it is an ongoing development.
 
 * Simultanious drawing on a canvas
 * Chatroom
+* Random colour per user
+
+## Planned Fatures
+
+* Usernames
+* Separated Canvases
+* Different drawing tools
