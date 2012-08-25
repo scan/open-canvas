@@ -1,106 +1,24 @@
-* {
-  margin: 0;
-  padding: 0;
-}
-html {
-  background: url("../images/bg.png") repeat #e4e4e4;
-  overflow: hidden;
-}
-body {
-  font: 14px/1.3 'Segoe UI', Arial, sans-serif;
-  color: #444;
-}
-a,
-a:visited {
-  outline: none;
-  color: #43819b;
-}
-a:hover {
-  text-decoration: none;
-}
-section,
-footer,
-header {
-  display: block;
-}
-#instructions {
-  position: fixed;
-  background-color: rgba(255,255,255,0.7);
-  width: 400px;
-  height: 78px;
-  top: 50%;
-  left: 50%;
-  margin: -120px 0 0 -225px;
-  text-align: center;
-  padding: 25px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  box-shadow: 0 0 3px rgba(100,100,100,0.1), 0 3px 1px #d4d4d4;
-  color: #555;
-}
-#instructions h1 {
-  font-size: 22px;
-  padding-bottom: 8px;
-}
-#instructions h2 {
-  font-size: 13px;
-  font-weight: normal;
-  padding-bottom: 8px;
-}
-#instructions h3 {
-  font-size: 12px;
-  font-weight: normal;
-  font-style: italic;
-  color: #999;
-}
-#cursors {
-  position: relative;
-}
-#cursors .cursor {
-  position: absolute;
-  width: 15px;
-  height: 22px;
-  background: url("../images/pointer.png") no-repeat -4px 0;
-}
-#chatpanel {
-  background-color: #aaa;
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 20%;
-  height: 100%;
-}
-#chatpanel #chatform {
-  margin: 5px;
-}
-#chatpanel #chatform input,
-#chatpanel #chatform button {
-  padding: 2px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  border: 1px solid #000;
-}
-#chatpanel #chatform #chattext {
-  width: 80%;
-  color: #000;
-  padding: 2px;
-}
-#chatpanel #chatform #sendbutton {
-  background: #00b;
-  color: #eee;
-  width: 15%;
-  float: right;
-}
-#chatpanel ul#chatlist {
-  background: #fff;
-  display: block;
-  list-style-type: none;
-  margin: 10px;
-  overflow-y: auto;
-}
-#chatpanel ul#chatlist li {
-  font-size: 12px;
-  color: #555;
-}
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-family:inherit;font-size:100%;vertical-align:baseline}
+body{line-height:1;color:#000;background:#fff}
+ol,ul{list-style:none}
+table{border-collapse:separate;border-spacing:0;vertical-align:middle}
+caption,th,td{text-align:left;font-weight:normal;vertical-align:middle}
+a img{border:none}
+html{background:url("../images/bg.png") repeat #e4e4e4;overflow:hidden}
+body{font:14px/1.3 'Segoe UI',Arial,sans-serif;color:#444}
+a,a:visited{outline:none;color:#43819b}
+a:hover{text-decoration:none}
+section,footer,header{display:block}
+#instructions{position:fixed;background-color:rgba(255,255,255,0.7);width:400px;height:78px;top:50%;left:50%;margin:-120px 0 0 -225px;text-align:center;padding:25px;-webkit-border-radius:10px;border-radius:10px;-webkit-box-shadow:0 0 3px rgba(100,100,100,0.1),0 3px 1px #d4d4d4;box-shadow:0 0 3px rgba(100,100,100,0.1),0 3px 1px #d4d4d4;color:#555;}
+#instructions h1{font-size:22px;padding-bottom:8px}
+#instructions h2{font-size:13px;font-weight:normal;padding-bottom:8px}
+#instructions h3{font-size:12px;font-weight:normal;font-style:italic;color:#999}
+#cursors{position:relative;}
+#cursors .cursor{position:absolute;width:15px;height:22px;background:url("../images/pointer.png") no-repeat -4px 0}
+#chatpanel{background-color:#aaa;position:fixed;top:0;right:0;width:20%;height:100%;}
+#chatpanel #chatform{margin:5px;}
+#chatpanel #chatform input,#chatpanel #chatform button{padding:2px;-webkit-border-radius:5px;border-radius:5px;border:1px solid #000}
+#chatpanel #chatform #chattext{width:80%;color:#000;padding:2px}
+#chatpanel #chatform #sendbutton{background:#00b;color:#eee;width:15%;float:right}
+#chatpanel ul#chatlist{background:#fff;display:block;list-style-type:none;margin:10px;overflow-y:auto;}
+#chatpanel ul#chatlist li{font-size:12px;color:#555}

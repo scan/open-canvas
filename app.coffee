@@ -1,4 +1,5 @@
 express = require 'express'
+stylus = require 'stylus'
 
 module.exports = app = express.createServer()
 
@@ -12,9 +13,16 @@ app.configure ->
     app.set 'view options', layout: no
 
     app.use express.compiler src: PUBLIC_DIR, enable: ['coffeescript']
-    app.use (require 'stylus').middleware src: PUBLIC_DIR, dest: PUBLIC_DIR
+
+    app.use stylus.middleware
+        src: PUBLIC_DIR
+        dest: PUBLIC_DIR
+        compile: (str, path) ->
+            stylus(str).set('filename', path).set('compress', yes).use (require 'nib')()
+
     app.use express.static PUBLIC_DIR
     app.use express.favicon()
+    app.use express.compress()
     app.use app.router
 
 app.configure 'development', ->
@@ -28,7 +36,7 @@ app.get '/', (req, res) ->
 app.get "*", (req, res) ->
     res.send 404, error: 'Not Found'
 
-PORT = process.env["app_port"] or 8080
+PORT = process.env["app_port"] or process.env.PORT or 8080
 app.listen PORT, ->
     console.log ":: nodester :: \n\nApp listening on port #{@address().port}"
 
@@ -40,12 +48,12 @@ io.sockets.on 'connection', (socket) ->
     colour = "##{randHex()}#{randHex()}#{randHex()}"
     name = "user#{++num}"
 
-    socket.set 'attributes', colour: colour, name: name, ->
-        socket.emit 'ready', colour: colour, name: name
+    socket.emit 'ready', colour: colour, name: name
 
     socket.on 'mousemove', (data) ->
         socket.broadcast.emit 'moving', data
 
     socket.on 'msg', (data) ->
-        socket.get 'attributes', (attr) ->
-            socket.all.emit 'msg', "<span style=\"color:#{attr.colour};font-style:italic\">#{attr.name}</span>: #{data}"
+        console.log data: data
+        socket.emit 'msg', "<span style=\"color:#{colour};font-style:italic\">#{name}</span>: #{data}"
+        socket.broadcast.emit 'msg', "<span style=\"color:#{colour};font-style:italic\">#{name}</span>: #{data}"
