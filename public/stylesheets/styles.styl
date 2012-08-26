@@ -56,9 +56,9 @@ section, footer, header
 
     .cursor
         position: absolute
-        width: 15px
-        height: 22px
-        background: url('../images/pointer.png') no-repeat -4px 0
+        width: 16px
+        height: 16px
+        background: url('../images/pointer.png') no-repeat
 
 #chatpanel
     background-color: #aaa
@@ -74,12 +74,13 @@ section, footer, header
             padding: 2px
             border-radius: 5px
             border: 1px solid #000
+            font-size: 14px
         #chattext
             width: 80%
             color: black
             padding: 2px
         #sendbutton
-            background: #00b
+            background: #e74424
             color: #eee
             width: 15%
             float: right
@@ -92,5 +93,19 @@ section, footer, header
         overflow-y: auto
 
         li
-            font-size: 12px
+            font-size: 14px
             color: #555
+
+    img
+        float: left
+        margin: 10px
+        height: 57px
+
+    label
+        text-transform: uppercase
+        font-size: 30px
+        line-height: 18px
+        display: block
+
+    label#first
+        line-height: 45px
