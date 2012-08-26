@@ -14,11 +14,14 @@ section,footer,header{display:block}
 #instructions h2{font-size:13px;font-weight:normal;padding-bottom:8px}
 #instructions h3{font-size:12px;font-weight:normal;font-style:italic;color:#999}
 #cursors{position:relative;}
-#cursors .cursor{position:absolute;width:15px;height:22px;background:url("../images/pointer.png") no-repeat -4px 0}
+#cursors .cursor{position:absolute;width:16px;height:16px;background:url("../images/pointer.png") no-repeat}
 #chatpanel{background-color:#aaa;position:fixed;top:0;right:0;width:20%;height:100%;}
 #chatpanel #chatform{margin:5px;}
-#chatpanel #chatform input,#chatpanel #chatform button{padding:2px;-webkit-border-radius:5px;border-radius:5px;border:1px solid #000}
+#chatpanel #chatform input,#chatpanel #chatform button{padding:2px;-webkit-border-radius:5px;border-radius:5px;border:1px solid #000;font-size:14px}
 #chatpanel #chatform #chattext{width:80%;color:#000;padding:2px}
-#chatpanel #chatform #sendbutton{background:#00b;color:#eee;width:15%;float:right}
+#chatpanel #chatform #sendbutton{background:#e74424;color:#eee;width:15%;float:right}
 #chatpanel ul#chatlist{background:#fff;display:block;list-style-type:none;margin:10px;overflow-y:auto;}
-#chatpanel ul#chatlist li{font-size:12px;color:#555}
+#chatpanel ul#chatlist li{font-size:14px;color:#555}
+#chatpanel img{float:left;margin:10px;height:57px}
+#chatpanel label{text-transform:uppercase;font-size:30px;line-height:18px;display:block}
+#chatpanel label#first{line-height:45px}
