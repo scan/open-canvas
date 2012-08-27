@@ -1,7 +1,7 @@
 (function() {
 
   $(function() {
-    var $canvas, $doc, $win, clients, colour, ctx, cursors, drawLine, id, instructions, lastEmit, prev, socket;
+    var $canvas, $doc, $win, clients, colour, ctx, instructions, size, socket, tool;
     if (!('getContext' in document.createElement('canvas'))) {
       return alert('Seems like your browser doesn\'t support an HTML5 canvas!');
     } else {
@@ -12,89 +12,101 @@
       ctx = $canvas[0].getContext('2d');
       instructions = $('#instructions');
       colour = '#000';
-      id = Math.round($.now() * Math.random());
+      tool = 'pencil';
+      size = 1;
       window.drawing = false;
       clients = [];
-      cursors = [];
       socket = io.connect();
-      socket.on('moving', function(data) {
-        if (!(data.id in clients)) {
-          cursors[data.id] = ($('<div/>', {
-            "class": 'cursor'
-          })).appendTo('#cursors');
-        }
-        cursors[data.id].css({
-          'left': data.x,
-          'top': data.y
-        });
-        if (data.drawing && clients[data.id]) {
-          drawLine(clients[data.id].x, clients[data.id].y, data.x, data.y, data.colour);
-        }
-        clients[data.id] = data;
-        return clients[data.id].updated = $.now();
-      });
-      prev = {};
-      $canvas.on('mousedown', function(e) {
-        e.preventDefault();
-        window.drawing = true;
-        prev.x = e.pageX;
-        prev.y = e.pageY;
-        instructions.fadeOut();
-        return false;
-      });
-      $doc.bind('mouseup mouseleave', function() {
-        return window.drawing = false;
-      });
-      lastEmit = $.now();
-      $doc.on('mousemove', function(e) {
-        if ($.now() - lastEmit > 30) {
-          socket.emit('mousemove', {
-            x: e.pageX,
-            y: e.pageY,
-            drawing: drawing,
-            id: id
-          });
-          lastEmit = $.now();
-        }
-        if (drawing) {
-          drawLine(prev.x, prev.y, e.pageX, e.pageY, colour);
-          prev.x = e.pageX;
-          return prev.y = e.pageY;
-        }
-      });
-      setInterval((function() {
-        var ident;
-        for (ident in clients) {
-          if ($.now() - clients[ident].updated > 10000) {
-            cursors[ident].remove();
-            delete clients[ident];
-            delete cursors[ident];
-          }
-        }
-        return null;
-      }), 10000);
-      drawLine = function(fromx, fromy, tox, toy, colour) {
-        ctx.beginPath();
-        ctx.moveTo(fromx, fromy);
-        ctx.lineTo(tox, toy);
-        ctx.strokeStyle = colour;
-        return ctx.stroke();
-      };
-      ($('#chatform')).submit(function(e) {
-        e.preventDefault();
-        socket.emit('msg', ($('#chattext')).val());
-        ($('#chattext')).val('').focus();
-        return false;
-      });
-      socket.on('msg', function(d) {
-        return ($('#chatlist')).prepend("<li>" + d + "</li>");
-      });
-      socket.on('joined', function(d) {
-        return ($('#chatlist')).prepend("<li><i><span style=\"color:" + d.colour + "\">" + d.name + "</span> joined.</i></li>");
-      });
       return socket.on('ready', function(d) {
+        var draw, lastEmit;
         colour = d.colour;
-        return ($('#chatlist')).prepend("<li><i>You joined as <span style=\"color:" + d.colour + "\">" + d.name + "</span>.</i></li>");
+        ($('#chatlist')).prepend("<li><i>You joined as <span style=\"color:" + d.colour + "\">" + d.name + "</span>.</i></li>");
+        clients = d.clients;
+        socket.on('moving', function(data) {
+          if (!(data.id in clients)) {
+            cursors[data.id] = ($('<div/>', {
+              "class": 'cursor'
+            })).appendTo('#cursors');
+          }
+          cursors[data.id].css({
+            'left': data.position.x,
+            'top': data.position.y
+          });
+          clients[data.id] = data;
+          return clients[data.id].updated = $.now();
+        });
+        $canvas.on('mousedown', function(e) {
+          e.preventDefault();
+          window.drawing = true;
+          instructions.fadeOut();
+          return false;
+        });
+        $doc.bind('mouseup mouseleave', function() {
+          return window.drawing = false;
+        });
+        lastEmit = $.now();
+        $doc.on('mousemove', function(e) {
+          var data;
+          if ($.now() - lastEmit > 30) {
+            socket.emit('mousemove', {
+              x: e.pageX,
+              y: e.pageY
+            });
+            lastEmit = $.now();
+          }
+          if (drawing) {
+            data = {
+              position: {
+                x: e.pageX,
+                y: e.pageY
+              },
+              tool: tool,
+              size: size,
+              colour: colour
+            };
+            draw(data);
+            return socket.emit('drawn', data);
+          }
+        });
+        draw = function(data) {
+          console.log({
+            drawing: true,
+            data: data
+          });
+          ctx.beginPath();
+          switch (data.tool) {
+            case 'pencil':
+              ctx.arc(data.position.x, data.position.y, data.size, 0, 2 * Math.PI, false);
+          }
+          ctx.fillStyle = data.colour;
+          ctx.fill();
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = data.colour;
+          return ctx.stroke();
+        };
+        socket.on('drawn', draw);
+        ($('#chatform')).submit(function(e) {
+          e.preventDefault();
+          socket.emit('msg', ($('#chattext')).val());
+          ($('#chattext')).val('').focus();
+          return false;
+        });
+        socket.on('msg', function(d) {
+          return ($('#chatlist')).prepend("<li>" + d + "</li>");
+        });
+        socket.on('joined', function(d) {
+          ($('#chatlist')).prepend("<li><i><span style=\"color:" + d.colour + "\">" + d.name + "</span> joined.</i></li>");
+          return clients[d.id] = {
+            name: d.name,
+            colour: d.colour
+          };
+        });
+        return socket.on('left', function(d) {
+          ($('#chatlist')).prepend("<li><i><span style=\"color:" + d.colour + "\">" + d.name + "</span> left.</i></li>");
+          cursors[d.id].remove();
+          delete clients[d.id];
+          return delete cursors[d.id];
+        });
       });
     }
   });
