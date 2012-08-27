@@ -63,11 +63,11 @@ $ ->
             draw = (data) ->
                 ctx.beginPath()
                 if data.tool is 'eraser'
-                    ctx.clearRect data.position.x - (size / 2), data.position.y - (size / 2), size, size
+                    ctx.clearRect data.position.x - (data.size / 2), data.position.y - (data.size / 2), data.size, data.size
                 else
                     switch data.tool
                         when 'pencil'
-                            ctx.arc data.position.x, data.position.y, data.size, 0, 2 * Math.PI, no
+                            ctx.arc data.position.x, data.position.y, (data.size / 2), 0, 2 * Math.PI, no
                     ctx.fillStyle = data.colour
                     ctx.fill()
                     ctx.lineWidth = 1
@@ -108,3 +108,10 @@ $ ->
             ($ '#toolsize').change ->
                 size = (parseInt $(@).val()) or 1
                 ($ '#sizespan').text size.toString()
+            ($ '#toolcolour').val colour.substr 1
+            ($ '#colourspan').css
+                'background-color': colour
+            ($ '#toolcolour').change ->
+                colour = "##{$(@).val()}"
+                ($ '#colourspan').css
+                    'background-color': colour

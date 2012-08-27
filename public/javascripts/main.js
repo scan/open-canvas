@@ -72,11 +72,11 @@
         draw = function(data) {
           ctx.beginPath();
           if (data.tool === 'eraser') {
-            return ctx.clearRect(data.position.x - (size / 2), data.position.y - (size / 2), size, size);
+            return ctx.clearRect(data.position.x - (data.size / 2), data.position.y - (data.size / 2), data.size, data.size);
           } else {
             switch (data.tool) {
               case 'pencil':
-                ctx.arc(data.position.x, data.position.y, data.size, 0, 2 * Math.PI, false);
+                ctx.arc(data.position.x, data.position.y, data.size / 2, 0, 2 * Math.PI, false);
             }
             ctx.fillStyle = data.colour;
             ctx.fill();
@@ -118,9 +118,19 @@
           tool = 'eraser';
           return false;
         });
-        return ($('#toolsize')).change(function() {
+        ($('#toolsize')).change(function() {
           size = (parseInt($(this).val())) || 1;
           return ($('#sizespan')).text(size.toString());
+        });
+        ($('#toolcolour')).val(colour.substr(1));
+        ($('#colourspan')).css({
+          'background-color': colour
+        });
+        return ($('#toolcolour')).change(function() {
+          colour = "#" + ($(this).val());
+          return ($('#colourspan')).css({
+            'background-color': colour
+          });
         });
       });
     }

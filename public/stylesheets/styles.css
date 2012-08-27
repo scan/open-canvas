@@ -28,3 +28,7 @@ section,footer,header{display:block}
 #chatpanel label#first{line-height:45px}
 #toolbox{background:#fff;-webkit-transition:width 1s;-moz-transition:width 1s;-o-transition:width 1s;-ms-transition:width 1s;transition:width 1s;-moz-transition:width 1s;-webkit-transition:width 1s;-o-transition:width 1s;position:fixed;left:0;top:0;width:0;height:100%;overflow:hidden;border-right:10px solid #888;}
 #toolbox:hover{width:100px}
+#toolbox input,#toolbox button,#toolbox label{display:block;width:80%;margin:2px auto}
+#toolbox label{text-align:center;overflow:hidden}
+#toolbox #toolcolour{display:inline-block;width:50px}
+#toolbox #colourspan{margin:2px;display:inline-block;width:12px;height:12px}
