@@ -42,10 +42,11 @@
           return false;
         });
         $doc.bind('mouseup mouseleave', function() {
-          return window.drawing = false;
+          window.drawing = false;
+          return true;
         });
         lastEmit = $.now();
-        $doc.on('mousemove', function(e) {
+        $canvas.on('mousemove', function(e) {
           var data;
           if ($.now() - lastEmit > 30) {
             socket.emit('mousemove', {
@@ -69,20 +70,20 @@
           }
         });
         draw = function(data) {
-          console.log({
-            drawing: true,
-            data: data
-          });
           ctx.beginPath();
-          switch (data.tool) {
-            case 'pencil':
-              ctx.arc(data.position.x, data.position.y, data.size, 0, 2 * Math.PI, false);
+          if (data.tool === 'eraser') {
+            return ctx.clearRect(data.position.x - (size / 2), data.position.y - (size / 2), size, size);
+          } else {
+            switch (data.tool) {
+              case 'pencil':
+                ctx.arc(data.position.x, data.position.y, data.size, 0, 2 * Math.PI, false);
+            }
+            ctx.fillStyle = data.colour;
+            ctx.fill();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = data.colour;
+            return ctx.stroke();
           }
-          ctx.fillStyle = data.colour;
-          ctx.fill();
-          ctx.lineWidth = 1;
-          ctx.strokeStyle = data.colour;
-          return ctx.stroke();
         };
         socket.on('drawn', draw);
         ($('#chatform')).submit(function(e) {
@@ -101,11 +102,25 @@
             colour: d.colour
           };
         });
-        return socket.on('left', function(d) {
+        socket.on('left', function(d) {
           ($('#chatlist')).prepend("<li><i><span style=\"color:" + d.colour + "\">" + d.name + "</span> left.</i></li>");
           cursors[d.id].remove();
           delete clients[d.id];
           return delete cursors[d.id];
+        });
+        ($('#penciltool')).click(function(e) {
+          e.preventDefault();
+          tool = 'pencil';
+          return false;
+        });
+        ($('#erasertool')).click(function(e) {
+          e.preventDefault();
+          tool = 'eraser';
+          return false;
+        });
+        return ($('#toolsize')).change(function() {
+          size = (parseInt($(this).val())) || 1;
+          return ($('#sizespan')).text(size.toString());
         });
       });
     }

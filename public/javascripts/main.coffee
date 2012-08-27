@@ -40,9 +40,10 @@ $ ->
 
             $doc.bind 'mouseup mouseleave', ->
                 window.drawing = off
+                true
 
             lastEmit = $.now()
-            $doc.on 'mousemove', (e) ->
+            $canvas.on 'mousemove', (e) ->
                 if $.now() - lastEmit > 30
                     socket.emit 'mousemove',
                         x: e.pageX
@@ -60,16 +61,18 @@ $ ->
                     socket.emit 'drawn', data
 
             draw = (data) ->
-                console.log drawing: yes, data: data
                 ctx.beginPath()
-                switch data.tool
-                    when 'pencil'
-                        ctx.arc data.position.x, data.position.y, data.size, 0, 2 * Math.PI, no
-                ctx.fillStyle = data.colour
-                ctx.fill()
-                ctx.lineWidth = 1
-                ctx.strokeStyle = data.colour
-                ctx.stroke()
+                if data.tool is 'eraser'
+                    ctx.clearRect data.position.x - (size / 2), data.position.y - (size / 2), size, size
+                else
+                    switch data.tool
+                        when 'pencil'
+                            ctx.arc data.position.x, data.position.y, data.size, 0, 2 * Math.PI, no
+                    ctx.fillStyle = data.colour
+                    ctx.fill()
+                    ctx.lineWidth = 1
+                    ctx.strokeStyle = data.colour
+                    ctx.stroke()
 
             socket.on 'drawn', draw
 
@@ -93,3 +96,15 @@ $ ->
                 cursors[d.id].remove()
                 delete clients[d.id]
                 delete cursors[d.id]
+
+            ($ '#penciltool').click (e) ->
+                e.preventDefault()
+                tool = 'pencil'
+                false
+            ($ '#erasertool').click (e) ->
+                e.preventDefault()
+                tool = 'eraser'
+                false
+            ($ '#toolsize').change ->
+                size = (parseInt $(@).val()) or 1
+                ($ '#sizespan').text size.toString()
